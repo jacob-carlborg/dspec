@@ -1,5 +1,5 @@
 /**
- * Copyright: Copyright (c) 2010-2011 Jacob Carlborg. All rights reserved.
+ * Copyright: Copyright (c) 2010-2012 Jacob Carlborg. All rights reserved.
  * Authors: Jacob Carlborg
  * Version: Initial created: Oct 17, 2010
  * License: $(LINK2 http://www.boost.org/LICENSE_1_0.txt, Boost Software License 1.0)
@@ -72,8 +72,7 @@ module dspec.Dsl;
 import mambo.core._;
 import mambo.util._;
 
-alias orange.util.Block!(void delegate (), string) Block;
-alias void delegate () Callback;
+import dspec.ExampleGroup;
 
 /**
  * Describes a test or a set of tests.
