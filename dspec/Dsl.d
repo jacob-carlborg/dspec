@@ -94,7 +94,7 @@ import dspec.ExampleGroup;
  */
 Block describe (string description) ()
 {
-	return null;
+	return ExampleGroup.instance.describe(description);
 }
 
 /**
@@ -123,30 +123,29 @@ Block describe (string description) ()
  */
 Block it (string description) ()
 {
-	return null;
+	return ExampleGroup.instance.it(description);
 }
 
 /// A callback that will be called after each example.
 @property Callback after ()
 {
-	return null;
+	return ExampleGroup.instance.after;
 }
 
 /// Ditto
 @property Callback after (Callback callback)
 {
-	return null;
+	return ExampleGroup.instance.after = callback;
 }
-
 
 /// A callback that will be called before each example.
 @property Callback before ()
 {
-	return null;
+	return ExampleGroup.instance.before;
 }
 
 /// Ditto
 @property Callback before (Callback callback)
 {
-	return null;
+	return ExampleGroup.instance.before = callback;
 }
