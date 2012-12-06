@@ -13,12 +13,12 @@ import mambo.core._;
 import mambo.util._;
 import mambo.text.Inflections;
 
+package alias void delegate () Callback;
 private alias AssertError AssertException;
 
 package final class ExampleGroup
 {
 	alias .Block!(void delegate (), string) Block;
-	alias void delegate () Callback;
 
 	struct ExampleGroupManager
 	{
