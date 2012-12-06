@@ -7,8 +7,13 @@
  */
 module dspec.ExampleGroup;
 
+import core.exception;
+
 import mambo.core._;
 import mambo.util._;
+import mambo.text.Inflections;
+
+private alias AssertError AssertException;
 
 package final class ExampleGroup
 {
@@ -22,13 +27,13 @@ package final class ExampleGroup
 		
 		void opCatAssign (ExampleGroupContext exampleGroup)
 		{
-			exampleGroup ~= exampleGroup;
+			exampleGroups ~= exampleGroup;
 			lastIndex++;
 		}
 		
 		void opCatAssign (Example example)
 		{
-			last.tests ~= example;
+			last.examples ~= example;
 		}
 		
 		ExampleGroupContext opIndex (size_t i)
@@ -72,7 +77,7 @@ package final class ExampleGroup
 		private
 		{
 			ExampleGroupManager exampleGroups;
-			Example[] tests;
+			Example[] examples;
 			Example[] failures;
 			Example[] pending;
 			size_t lastIndex = size_t.max;
@@ -222,12 +227,12 @@ private:
 				try
 				{
 					execute in {
-						execute.run();
+						example.run();
 					};
 				}
 
 				catch (AssertException e)
-					handleFaliure(context, example, e);
+					handleFailure(context, example, e);
 			}
 		};
 	}
@@ -241,7 +246,7 @@ private:
 	void addExample (string description)
 	{
 		numberOfExamples++;
-		currentExampleGroup.example ~= Example(null, description);
+		currentExampleGroup.examples ~= Example(null, description);
 	}
 
 	void addPendingExample (ExampleGroupContext context, ref Example example)
@@ -250,20 +255,20 @@ private:
 		context.pending ~= example;
 	}
 
-	void handleFaliure (ExampleGroupContext context, ref Example example, AssertException exception)
+	void handleFailure (ExampleGroupContext context, ref Example example, AssertException exception)
 	{
-		numberOfFaliures++;
+		numberOfFailures++;
 		example.exception = exception;
-		context.faliures ~= example;
+		context.failures ~= example;
 	}
 
 	void internalDescribe (void delegate () block, string description)
 	{
 		if (currentExampleGroup)
-			currentExampleGroup.exampleGroups.last.exampleGroup = block;
+			currentExampleGroup.exampleGroups.last.block = block;
 
 		else
-			exampleGroups.last.exampleGroup = block;
+			exampleGroups.last.block = block;
 	}
 
 	void internalExample (void delegate () block, string description)
@@ -284,7 +289,7 @@ private:
 
 		failureId = 0;
 		printPending();
-		printFaliures();
+		printFailures();
 
 		print("\n", numberOfExamples, " ", pluralize("test", numberOfExamples),", ", numberOfFailures, " ", pluralize("failure", numberOfFailures));
 		printNumberOfPending();
@@ -311,7 +316,7 @@ private:
 		restore(indentation) in {
 			indentation ~= defaultIndentation;
 
-			foreach (i, ref example ; exampleGroup.example)
+			foreach (i, ref example ; exampleGroup.examples)
 			{
 				print(indentation, "- ", example.description);
 
@@ -356,7 +361,7 @@ private:
 	void printPendingExampleGroup (ExampleGroupContext exampleGroup)
 	{
 		foreach (example ; exampleGroup.pending)
-			println(indentation, exampleGroup.description, " ", example.message, "\n", indentation, indentation, "# Not Yet Implemented");
+			println(indentation, exampleGroup.description, " ", example.description, "\n", indentation, indentation, "# Not Yet Implemented");
 	}
 
 	void printFailures ()
@@ -381,16 +386,16 @@ private:
 	{
 		foreach (exampleGroup ; exampleGroups)
 		{
-			printFailuresDescription(exampleGroup);
+			printFailuresExampleGroup(exampleGroup);
 			printFailuresImpl(exampleGroup.exampleGroups);
 		}
 	}
 
-	void printFailuresDescription (ExampleGroupContext exampleGroup)
+	void printFailuresExampleGroup (ExampleGroupContext exampleGroup)
 	{
 		foreach (example ; exampleGroup.failures)
 		{
-			auto str = indentation ~ to!(string)(++failureId) ~ ") ";
+			auto str = indentation ~ .toString(++failureId) ~ ") ";
 			auto whitespace = toWhitespace(str.length);
 
 			println(str, exampleGroup.description, " ", example.description);			
@@ -418,7 +423,7 @@ private:
 		println("All ", numberOfExamples, pluralize(" test", numberOfExamples), " passed successfully.");
 	}
 	
-	bool isAllTestsSuccessful ()
+	bool isAllExamplesSuccessful ()
 	{
 		return !hasPending && !hasFailures;
 	}
