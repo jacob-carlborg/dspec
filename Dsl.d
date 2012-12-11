@@ -74,6 +74,8 @@ import mambo.util._;
 
 import dspec.ExampleGroup;
 
+private alias dspec.ExampleGroup.ExampleGroup.Block Block;
+
 /**
  * Describes a test or a set of tests.
  * 

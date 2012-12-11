@@ -18,7 +18,7 @@ private alias AssertError AssertException;
 
 package final class ExampleGroup
 {
-	alias .Block!(void delegate (), string) Block;
+	alias Use!(void delegate (), string) Block;
 
 	struct ExampleGroupManager
 	{
@@ -178,7 +178,7 @@ package final class ExampleGroup
 		return before_ = callback;
 	}
 
-	Block describe (string description) ()
+	Block describe (string description)
 	{
 		addExampleGroup(description);
 
@@ -189,7 +189,7 @@ package final class ExampleGroup
 		return block;
 	}
 
-	Block it (string description) ()
+	Block it (string description)
 	{
 		addExample(description);
 
@@ -239,8 +239,13 @@ private:
 
 	void addExampleGroup (string description)
 	{
-		auto exampleGroups = currentExampleGroup ? currentExampleGroup.exampleGroups : this.exampleGroups;
-		exampleGroups ~= new ExampleGroupContext(description);
+		auto context = new ExampleGroupContext(description);
+
+		if (currentExampleGroup)
+			currentExampleGroup.exampleGroups ~= context;
+
+		else
+			exampleGroups ~= context;
 	}
 
 	void addExample (string description)
