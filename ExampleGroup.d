@@ -205,12 +205,14 @@ package final class ExampleGroup
 		return block;
 	}
 
-	void run ()
+	bool run ()
 	{
 		foreach (exampleGroup ; exampleGroups)
 			runExampleGroup(exampleGroup);
 
 		printResult();
+
+		return allPass;
 	}
 
 private:
