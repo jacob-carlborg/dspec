@@ -178,6 +178,11 @@ package final class ExampleGroup
 		return before_ = callback;
 	}
 
+	@property bool allPass ()
+	{
+		return numberOfFailures == 0;
+	}
+
 	Block describe (string description)
 	{
 		addExampleGroup(description);
