@@ -99,6 +99,11 @@ Block describe (string description) ()
 	return ExampleGroup.instance.describe(description);
 }
 
+Block describe () (string description)
+{
+	return ExampleGroup.instance.describe(description);
+}
+
 /**
  * Describes what a test should do.
  * 
@@ -124,6 +129,11 @@ Block describe (string description) ()
  * Returns: a context in which the test will be run 
  */
 Block it (string description) ()
+{
+	return ExampleGroup.instance.it(description);
+}
+
+Block it () (string description)
 {
 	return ExampleGroup.instance.it(description);
 }
