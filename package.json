@@ -1,0 +1,17 @@
+{
+	"name": "dspec",
+	"description": "A behavior driven testing framework for the D programming language",
+	"authors": ["Jacob Carlborg"],
+	"homepage": "https://github.com/jacob-carlborg/dspec",
+	"license": "BSL-1.0",
+	"copyright": "Copyright (c) 2013 Jacob Carlborg. All rights reserved.",
+
+	"targetType": "staticLibrary",
+	"targetName": "dspec",
+	"sourcePaths": ["dspec"],
+	"importPaths": ["dspec"],
+
+	"dependencies": {
+		"dstack": "0.0.1"
+	}
+}
